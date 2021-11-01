@@ -7,7 +7,11 @@ import '../styles/auth.scss';
 import { useAuth } from '../hooks/useAuth';
 
 
-
+/*
+não importar usando o export default
+pois se eu mudar o nome da função
+ela nao irá mostrar o erro
+*/
 export function Home() {
     const history = useHistory();
 
@@ -19,12 +23,8 @@ export function Home() {
             singInWithGoogle();
         }else{
             history.push('/rooms/new');
-        }
-       
-        
+        }     
     }
-
-   
     return (
         <div id="page-auth">
             <aside>
@@ -50,10 +50,8 @@ export function Home() {
                             entrar na sala
                         </Button>
                     </form>
-                    `
                 </div>
-            </main>
-            `
+            </main>        
         </div>
     )
 }
