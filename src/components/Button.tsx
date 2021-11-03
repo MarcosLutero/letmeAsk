@@ -2,10 +2,12 @@
 componente criado
 um componente é uma função
 */
+
+
+//importa todos as propriedades do botão do html
 import {ButtonHTMLAttributes} from 'react';
 
 import '../styles/button.scss'
-
 
 /**
  tipagem 

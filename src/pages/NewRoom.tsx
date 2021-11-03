@@ -52,7 +52,13 @@ export function NewRoom() {
                         </Button>
                     </form>
                     <p>
-                        Quer entrar em uma sala existente? <Link to="/">Clique aqui</Link>
+                        Quer entrar em uma sala existente? 
+                        {/*
+                         O Link funciona como se fosse a 
+                         tag <a></a> do html
+                         lembre-se de importar
+                        */}
+                        <Link to="/">Clique aqui</Link>
                     </p>
                 </div>
             </main>       

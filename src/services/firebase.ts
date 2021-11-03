@@ -1,3 +1,8 @@
+/**
+ * como instalar o firebase
+ * yarn add firebase
+ * 
+ */
 
 import firebase from 'firebase/compat/app';
 
@@ -6,6 +11,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/database';
 
 // Your web app's Firebase configuration
+// copiado do firebase
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -19,6 +25,8 @@ const firebaseConfig = {
   
 firebase.initializeApp(firebaseConfig);
 
+
+//pra usar na aplicação com o nome
 const auth = firebase.auth();
 const database = firebase.database();
 
