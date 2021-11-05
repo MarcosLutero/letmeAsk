@@ -6,13 +6,14 @@
  Este projeto está usando o typescript mas o pacote router-dom não foi desenvolvido
  usando o typescript então instalamos um pacote terceiro
  comando: "yarn add @types/react-router-dom - D"
- "yarn add @types/nome do pacote -dependencia "
+ "yarn add @types/nome do pacote -dependência "
 */
 
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { NewRoom } from './pages/NewRoom';
 import { Home } from './pages/Home';
 import { AuthContextProvider } from './context/AuthContext'
+import { Room } from './pages/Room';
 
 /*
 o react tem 3  conceitos
@@ -32,11 +33,11 @@ maneira diferente
 
 Estado é uma informação mantida por um componente
 dentro do react
-informação alterada pelo usuario
+informação alterada pelo usuário
 
 
 o principio da imutabilidade diz que 
-no momento que uma variavel for 
+no momento que uma variável for 
 criada dentro de um estado de um 
 componente ela não sofre alterações
 sempre a gente cria uma nova 
@@ -49,14 +50,17 @@ function App() {
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        {/*
+        <Switch>
+          {/*
         O caminho "path = " pode ser qualquer coisa
         exceto a Home
         pois se eu quiser que seja a pagina inicial tem que ser
         '/' exact 
         */}
-        <Route path='/' exact component={Home} />
-        <Route path='/rooms/new' component={NewRoom} />
+          <Route path='/' exact component={Home} />
+          <Route path='/rooms/new' exact component={NewRoom} />
+          <Route path='/rooms/:id' component={Room} />
+        </Switch>
       </AuthContextProvider>
 
     </BrowserRouter>

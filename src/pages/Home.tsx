@@ -1,11 +1,11 @@
 /*
-A biblioteca history permite gerenciar 
+A biblioteca history permite gerência 
 facilmente o histórico da sessão em 
 qualquer lugar que javaScript seja 
 executado. Um objeto abstrai as 
 diferenças em vários ambientes e 
 fornece uma API mínima que permite 
-gerenciar a pilha de história, 
+gerência a pilha de história, 
 navegar e persistir o estado entre as 
 sessões.
 */
@@ -22,6 +22,8 @@ yarn add node-sass@^5.0.0
 */
 import '../styles/auth.scss';
 import { useAuth } from '../hooks/useAuth';
+import { FormEvent, useState } from 'react';
+import { database } from '../services/firebase';
 
 /*
 não importar usando o export default
@@ -29,34 +31,56 @@ pois se eu mudar o nome da função
 ela nao irá mostrar o erro
 */
 export function Home() {
-
-/*
+    /*
 o history é um hook e todo o hook
 tem que está dentro do componente
 */
     const history = useHistory();
-
-/*
+    /*
 Usamos o contexto para salvar algumas 
-informações, do gmail (nome, avatar e 
+informações, do g-mail (nome, avatar e 
 etc) para que nao precisemos ir no 
 firebase o temp todo 
 */
-
     const {user  ,singInWithGoogle} = useAuth()
+    /*
+    salvar o código da sala que o usuário
+    está tendo acessar
+    */
+    const [roomCode, setRoomCode] = useState('');
 
-    function handleCreateRoom(){
+    async function handleCreateRoom(){
         
         if(!user) {
-            //se o usuario nao estiver autenticado 
+            //se o usuário nao estiver autenticado 
             //ele vai chamar a função
-            singInWithGoogle();
+            await singInWithGoogle();
         }else{
             //se ja estiver autenticado ele
-            // vai apenas redirencionar
+            // vai apenas redirecionar
             history.push('/rooms/new');
         }     
     }
+
+    //usada no formulário
+    async function handleJoinRoom(event: FormEvent){
+        event.preventDefault();
+        if(roomCode.trim() === ""){
+            return;
+        }
+
+        const roomRef = await database.ref(`rooms/${roomCode}`).get();
+        if(!roomRef.exists()){
+            alert("Room does not exists");
+            return;
+        }
+            history.push(`/rooms/${roomCode}`)
+        
+
+
+
+    }
+
     return (
         /* primeiramente sempre criar o 
         "HTML" inicialmente
@@ -68,12 +92,12 @@ firebase o temp todo
                 sempre usar svg nas imagens
              
                 sempre que quiser uma imagem
-                no meu codigo eu tenho que importar
+                no meu código eu tenho que importar
                 
                 webpack é um module bundler
                 
                 */}
-                <img src={illustrationImg} alt="ilustracao" />
+                <img src={illustrationImg} alt="ilustração" />
                 <strong>Crie salas de Q&amp;A ao-vivo</strong>
                 <p>tire suas duvidas da audição em tempo real</p>
             </aside>
@@ -86,15 +110,17 @@ firebase o temp todo
                         Crie sua sala com o Google
                     </button>
                     <div className="separator">ou entre em um  sala</div>
-                    <form >
+                    <form onSubmit={handleJoinRoom}>
                         <input
                             type="text"
                             placeholder="digite o codigo da sala"
+                            onChange={event =>setRoomCode(event.target.value)}
+                            value={roomCode}
                         />
                         {/*
                         Componente do react
-                        se iniciar com letra maiuscula é componente do react
-                        se iniciar com letra minuscula e parte do html
+                        se iniciar com letra maiúscula é componente do react
+                        se iniciar com letra minúscula e parte do html
                         */}
                         <Button type="submit">
                             entrar na sala

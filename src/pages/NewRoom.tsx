@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'   
+import {Link, useHistory} from 'react-router-dom'   
 import {FormEvent, useState} from 'react';
 import illustrationImg from '../assets/images/illustration.svg'
 import logoImg from '../assets/images/logo.svg';
@@ -9,13 +9,25 @@ import { database } from '../services/firebase';
 
 export function NewRoom() {
 
+    const history = useHistory()
     const {user} = useAuth();
     
     const [newRoom, setNewRoom] = useState('');
 
+    /*toda a função passa por algum 
+    vento nativo do html (tipo o 
+    onSubmit) ela geralmente por padrão
+    recebe por parâmetro o próprio evento
+    
+    Devemos também escolher o tipo no 
+    caso escolhemos o formEvent
+    */
     async function handleCreateRoom (event:FormEvent){
+        /* o preventDefault vai 
+        prevenir o comportamento padrão*/
         event.preventDefault();
         
+        //apaga os espaços em bran co
         if(newRoom.trim() === ''){
             return;
         }
@@ -24,15 +36,28 @@ export function NewRoom() {
 
         //fazendo um push dentro da room
         const firebaseRoom = await roomRef.push({
+            //titulo da sala
             title: newRoom,
-            //pega o usuario (o ? significa que ele pode ser undefinided)
+            /*pega o usuário (do userAuth)
+            (o ? significa que ele 
+            pode ser undefined)
+            */
+
+            /*
+             o authorId é importante pois 
+             quero saber qual usuário vai 
+             ter permissão alterar dados 
+             do sistema
+             */
             authorId: user?.id, 
         })
+        
+        history.push(`/rooms/${firebaseRoom.key}`)
     } 
     return (
         <div id="page-auth">
             <aside>
-                <img src={illustrationImg} alt="ilustracao" />
+                <img src={illustrationImg} alt="ilustração" />
                 <strong>Crie salas de Q&amp;A ao-vivo</strong>
                 <p>tire suas duvidas da audição em tempo real</p>
             </aside>
@@ -40,6 +65,12 @@ export function NewRoom() {
                 <div className="main-content">
                     <img src={logoImg} alt="leatmeask"/>
                   <h2>Criar uma nova sala</h2>
+                   {/*
+                   por padrão todo o formulário envia 
+                   o usuário para algum lugar 
+
+                   Nessa aplicação nao queremos isso
+                   */}
                     <form onSubmit={handleCreateRoom}>
                         <input
                             type="text"

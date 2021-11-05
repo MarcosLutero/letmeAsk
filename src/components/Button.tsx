@@ -18,9 +18,11 @@ import '../styles/button.scss'
  */
 type ButtonProps= ButtonHTMLAttributes<HTMLButtonElement>
 
+// repasse de props
 export function Button(props: ButtonProps){
 
     return(
+        //pega todas as propriedades
         <button className="button" {...props}>
 
         </button>

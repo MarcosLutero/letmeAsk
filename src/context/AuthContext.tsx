@@ -1,6 +1,6 @@
 /*exportando o contexto do react
 o useEffect(rook) serve para recuperar o informação de 
-autenticação do usuario se ele atualizar (f5) 
+autenticação do usuário se ele atualizar (f5) 
 */
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { auth, firebase } from "../services/firebase";
@@ -13,14 +13,14 @@ export const AuthContext = createContext({} as AuthContextType);
 
 //quais informações eu vou ter no meu contexto
 type AuthContextType = {
-    // ou e um objeto do tio usuario ou e indefinido
+    // ou e um objeto do tio usuário ou e indefinido
     user: User | undefined,
     /*toda a requisição async/await retorna uma promisse
     por isso o Promisse<>*/
     singInWithGoogle: () => Promise<void>,
 }
 
-//formato do usuario 
+//formato do usuário 
 type User = {
     id: string;
     name: string;
@@ -28,7 +28,7 @@ type User = {
 }
 
 /* é criado essa tipagem
-    pq quando envio um conteudo por dentro do componente
+    pq quando envio um conteúdo por dentro do componente
     chamamos de children
 
     o tipo é RectNode 
@@ -40,12 +40,16 @@ export function AuthContextProvider(props: AuthContextProvider) {
     //estado
     const [user, setUser] = useState<User>();
 
-    //recebe dois parametros
-    // primeiro qual função eu quero execultar 
-    //segundo quando eu quero execultar , sempre vai ser um array
+    /*recebe dois parâmetros
+    primeiro qual função eu quero executar 
+    segundo quando eu quero executar , 
+    sempre vai ser um array
+    
+    o useEffect é um hook pois ele começa com o "use"
+    */
     useEffect(() => {
         // sempre que usar um evento 
-        //litenner e bom colocar numa variavel
+        //listener e bom colocar numa variável
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 const {
@@ -66,7 +70,7 @@ export function AuthContextProvider(props: AuthContextProvider) {
 
         return () => {
             //para desativar pq eu tenho
-            //a obrigação de me descadastrar
+            //a obrigação de me des-cadastrar
             unsubscribe();
         }
 //se eu quero disparar a função apenas uma unica vez 
@@ -88,14 +92,14 @@ export function AuthContextProvider(props: AuthContextProvider) {
         if (result.user) {
             /* 
             se o resultado da busca for verdadeiro
-            eu vou buscar algumas informações do meu usuario
+            eu vou buscar algumas informações do meu usuário
             */
             const {
                 displayName, photoURL, uid
             } = result.user
             if (!displayName || !photoURL) {
                 /*
-                se o usuario nao tiver as infomações requeridas acima
+                se o usuário nao tiver as informações requeridas acima
                 vou disparar um erro                
                 */
                 throw new Error('Missing information  from Google Account');
@@ -113,8 +117,8 @@ export function AuthContextProvider(props: AuthContextProvider) {
 
     }
     return (
-        /*compartilhando o usuario com todas 
-        as paginas da aplicação do usuario logado
+        /*compartilhando o usuário com todas 
+        as paginas da aplicação do usuário logado
         
         pq compartilhar a função singInWithGoogle?
         pq na minha aplicação vou ter mais de um 
